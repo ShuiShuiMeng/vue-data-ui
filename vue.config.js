@@ -8,7 +8,7 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'Vue Data Engine' //page title
 
-const port = process.env.port || process.env.npm_config.port || 9527 //port
+const port = process.env.port || process.env.npm_config_port || 9527 //port
 
 /* https://cli.vuejs.org/config */
 module.exports = {
