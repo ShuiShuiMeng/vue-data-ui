@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld/index'
 
 Vue.use(Router)
 
 export const constantRoutes = [
   {
     path: '/',
-    component: HelloWorld
+    component: () => import('@/components/HelloWorld/index'),
+    hidden: true
   },
   {
     path: '/login',
