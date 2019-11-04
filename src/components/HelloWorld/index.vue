@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <img alt="Vue logo" src="@/assets/logo.png">
     <h1>{{ msg }}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
@@ -26,6 +27,7 @@
       <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+      <li><a href="localhost:9527/#/login" target="_blank" rel="noopener">TO LOGIN</a></li>
     </ul>
   </div>
 </template>
@@ -34,7 +36,7 @@
 export default {
   name: 'HelloWorld',
   props: {
-    msg: {      
+    msg: {
       type: String,
       default: ''
     }
