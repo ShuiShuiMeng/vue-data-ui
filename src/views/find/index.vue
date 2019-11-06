@@ -1,41 +1,56 @@
 <template>
-  <div class="app-container documentation-container">
-    <a
-      class="document-btn"
-      target="_blank"
-      @click="getNode"
-    >Documentation</a>
-    <a
-      class="document-btn"
-      target="_blank"
-      href="https://github.com/PanJiaChen/vue-element-admin/"
-    >Github Repository</a>
-    <a
-      class="document-btn"
-      target="_blank"
-      href="https://panjiachen.gitee.io/vue-element-admin-site/zh/"
-    >国内文档</a>
-    <a
-      class="document-btn"
-      target="_blank"
-      href="https://panjiachen.github.io/vue-element-admin-site/zh/job/"
-    >内推招聘</a>
-  </div>
+  <!-- the demo root element -->
+  <ul id="demo">
+    <tree-item
+      :item="treeData"
+      @make-folder="makeFolder"
+      @add-item="addItem"
+    />
+  </ul>
 </template>
 
 <script>
 import { fetchNodeByKey } from '@/api/tree'
+import Vue from 'vue'
+// demo data
+var treeData = {
+  name: 'My Tree',
+  children: [
+    { name: 'hello' },
+    { name: 'wat' },
+    {
+      name: 'child folder',
+      children: [
+        {
+          name: 'child folder',
+          children: [
+            { name: 'hello' },
+            { name: 'wat' }
+          ]
+        },
+        { name: 'hello' },
+        { name: 'wat' },
+        {
+          name: 'child folder',
+          children: [
+            { name: 'hello' },
+            { name: 'wat' }
+          ]
+        }
+      ]
+    }
+  ]
+}
 
 export default {
   name: 'Find',
   components: {},
   data() {
     return {
-      articleList: []
+      treeData: treeData
     }
   },
   created() {
-    this.getNode()
   },
   methods: {
     getNode() {
@@ -44,28 +59,24 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    makeFolder(item) {
+      Vue.set(item, 'children', [])
+      this.addItem(item)
+    },
+    addItem(item) {
+      item.children.push({
+        name: 'new.stuff'
+      })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.documentation-container {
-  margin: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  .document-btn {
-    margin-left: 50px;
-    display: block;
-    cursor: pointer;
-    background: black;
-    color: white;
-    height: 60px;
-    width: 200px;
-    margin-bottom: 16px;
-    line-height: 60px;
-    font-size: 20px;
-    text-align: center;
-  }
+<style scoped>
+ul {
+  padding-left: 1em;
+  line-height: 1.5em;
+  list-style-type: dot;
 }
 </style>

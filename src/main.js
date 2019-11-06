@@ -13,6 +13,7 @@ import store from './store'
 import router from './router'
 
 import './icons' // icon
+import './tree'  // tree
 import './permission' // permission control
 
 Vue.use(Element, {
