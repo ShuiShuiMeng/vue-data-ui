@@ -11,12 +11,24 @@
         </div>
       </template>
       <template slot="paneR">
-        <div class="right-container">
-          <ul class="node-message">
-            <li>test1</li>
-            <li>test2</li>
-          </ul>
-        </div>
+        <split-pane split="horizontal">
+          <template slot="paneL">
+            <div class="top-container">
+              <ul class="node-message">
+                <li>test11</li>
+                <li>test22</li>
+              </ul>
+            </div>
+          </template>
+          <template slot="paneR">
+            <div class="bottom-container">
+              <ul class="node-message">
+                <li>test1</li>
+                <li>test2</li>
+              </ul>
+            </div>
+          </template>
+        </split-pane>
       </template>
     </split-pane>
   </div>
@@ -89,7 +101,6 @@ export default {
 <style scoped>
 .components-container {
   position: relative;
-  height: 100%;
   height: 100vh;
 }
 
@@ -98,9 +109,16 @@ export default {
   height: 100%;
 }
 
-.right-container {
+.top-container {
+  background-color: #FCE38A;
+  height: 100%;
+  width: 100%;
+}
+
+.bottom-container {
   background-color: #95E1D3;
   height: 100%;
+  width: 100%;
 }
 
 .tree {
