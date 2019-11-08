@@ -1,23 +1,37 @@
 <template>
   <!-- the demo root element -->
-  <ul id="demo">
-    <tree-item
-      :item="treeData"
-      @make-folder="makeFolder"
-      @add-item="addItem"
-    />
-  </ul>
+  <div class="components-container">
+    <aside><strong>知识树</strong>----你可以在左侧查看知识树的结构，并在右侧显示当前节点的具体信息</aside>
+    <split-pane split="vertical" @resize="resize">
+      <template slot="paneL">
+        <div class="left-container">
+          <ul class="tree">
+            <tree-item :item="treeData" @add-item="addItem" />
+          </ul>
+        </div>
+      </template>
+      <template slot="paneR">
+        <div class="right-container">
+          <ul class="node-message">
+            <li>test1</li>
+            <li>test2</li>
+          </ul>
+        </div>
+      </template>
+    </split-pane>
+  </div>
 </template>
 
 <script>
 import { fetchNodeByKey } from '@/api/tree'
-import Vue from 'vue'
+import TreeItem from '@/components/TreeItem'
+import splitPane from 'vue-splitpane'
 // demo data
 var treeData = {
   name: 'My Tree',
   children: [
-    { name: 'hello' },
-    { name: 'wat' },
+    { name: 'hello', children: [] },
+    { name: 'wat', children: [] },
     {
       name: 'child folder',
       children: [
@@ -44,7 +58,7 @@ var treeData = {
 
 export default {
   name: 'Find',
-  components: {},
+  components: { TreeItem, splitPane },
   data() {
     return {
       treeData: treeData
@@ -60,23 +74,45 @@ export default {
         console.log(err)
       })
     },
-    makeFolder(item) {
-      Vue.set(item, 'children', [])
-      this.addItem(item)
-    },
     addItem(item) {
       item.children.push({
         name: 'new.stuff'
       })
+    },
+    resize() {
+      console.log('resize')
     }
   }
 }
 </script>
 
 <style scoped>
-ul {
-  padding-left: 1em;
+.components-container {
+  position: relative;
+  height: 100%;
+  height: 100vh;
+}
+
+.left-container {
+  background-color: #F38181;
+  height: 100%;
+}
+
+.right-container {
+  background-color: #95E1D3;
+  height: 100%;
+}
+
+.tree {
+  float: left;
+  width: 100%;
+  padding-left: 1.5em;
   line-height: 1.5em;
   list-style-type: dot;
 }
+.node-message {
+  float: left;
+  width: 100%;
+}
+
 </style>
