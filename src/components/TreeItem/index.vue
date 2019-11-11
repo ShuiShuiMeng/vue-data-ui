@@ -1,8 +1,8 @@
 <template>
   <li>
-    <div :class="{bold: isFolder}" @click="toggle">
+    <div :class="{bold: isFolder}" @click="toggle();changeNode()">
       {{ item.name }}
-      <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
+      <span v-if="isFolder" class="toggle">[{{ isOpen ? ' - ' : '+' }}]</span>
     </div>
     <ul v-show="isOpen" v-if="isFolder">
       <tree-item
@@ -10,6 +10,8 @@
         :key="index"
         :item="child"
         class="item"
+        @change-node="$emit('change-node', $event)"
+        @add-item="$emit('add-item', $event)"
       />
     </ul>
   </li>
@@ -39,6 +41,9 @@ export default {
       if (this.isFolder) {
         this.isOpen = !this.isOpen
       }
+    },
+    changeNode() {
+      this.$emit('change-node', this.item)
     }
   }
 }
@@ -49,10 +54,12 @@ body {
   font-family: Menlo, Consolas, monospace;
   color: #444;
 }
-.item {
-  cursor: pointer;
-}
+
 .bold {
   font-weight: bold;
+}
+.toggle {
+  font-weight: normal;
+  font-size: 10px;
 }
 </style>

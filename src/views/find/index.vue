@@ -6,7 +6,7 @@
       <template slot="paneL">
         <div class="left-container">
           <ul class="tree">
-            <tree-item :item="treeData" @add-item="addItem" />
+            <tree-item class="item" :item="treeData" @add-item="addItem" @change-node="changeNode" />
           </ul>
         </div>
       </template>
@@ -14,18 +14,12 @@
         <split-pane split="horizontal">
           <template slot="paneL">
             <div class="top-container">
-              <ul class="node-message">
-                <li>test11</li>
-                <li>test22</li>
-              </ul>
+              <text-list class="node-message" :text-list="templateData" />
             </div>
           </template>
           <template slot="paneR">
             <div class="bottom-container">
-              <ul class="node-message">
-                <li>test1</li>
-                <li>test2</li>
-              </ul>
+              <text-list class="node-message" :text-list="nodeData" />
             </div>
           </template>
         </split-pane>
@@ -35,64 +29,73 @@
 </template>
 
 <script>
-import { fetchNodeByKey } from '@/api/tree'
+import { fetchNodeById, fetchTreeByRoot } from '@/api/tree'
+import { fetchTemplateById } from '@/api/template'
 import TreeItem from '@/components/TreeItem'
-import splitPane from 'vue-splitpane'
-// demo data
-var treeData = {
-  name: 'My Tree',
-  children: [
-    { name: 'hello', children: [] },
-    { name: 'wat', children: [] },
-    {
-      name: 'child folder',
-      children: [
-        {
-          name: 'child folder',
-          children: [
-            { name: 'hello' },
-            { name: 'wat' }
-          ]
-        },
-        { name: 'hello' },
-        { name: 'wat' },
-        {
-          name: 'child folder',
-          children: [
-            { name: 'hello' },
-            { name: 'wat' }
-          ]
-        }
-      ]
-    }
-  ]
-}
+import TextList from '@/components/TextList'
+import SplitPane from 'vue-splitpane'
+
+var rootId = '1'
 
 export default {
   name: 'Find',
-  components: { TreeItem, splitPane },
+  components: { TreeItem, SplitPane, TextList },
   data() {
     return {
-      treeData: treeData
+      treeData: {},
+      templateData: {},
+      nodeData: {}
     }
   },
   created() {
+    this.getTree(rootId)
+    this.initNodeAndTemplate(rootId)
   },
   methods: {
-    getNode() {
-      fetchNodeByKey({ key: '1' }).then(response => {
-        console.log(response)
+    initNodeAndTemplate(id) {
+      fetchNodeById({ 'id': id }).then(response => {
+        this.nodeData = response.data
+        fetchTemplateById({ 'id': response.data.template }).then(res => {
+          this.templateData = res.data
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getTree(id) {
+      fetchTreeByRoot({ 'id': id }).then(response => {
+        this.treeData = response.data
+        // console.log(response)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getNode(id) {
+      fetchNodeById({ 'id': id }).then(response => {
+        this.nodeData = response.data
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getTemplate(id) {
+      fetchTemplateById({ 'id': id }).then(response => {
+        this.templateData = response.data
       }).catch(err => {
         console.log(err)
       })
     },
     addItem(item) {
       item.children.push({
-        name: 'new.stuff'
+        name: 'new'
       })
     },
     resize() {
       console.log('resize')
+    },
+    changeNode(item) {
+      console.log(item)
+      this.getTemplate(item.id)
+      this.getNode(item.id)
     }
   }
 }
@@ -103,24 +106,20 @@ export default {
   position: relative;
   height: 100vh;
 }
-
 .left-container {
   background-color: #F38181;
   height: 100%;
 }
-
 .top-container {
   background-color: #FCE38A;
   height: 100%;
   width: 100%;
 }
-
 .bottom-container {
   background-color: #95E1D3;
   height: 100%;
   width: 100%;
 }
-
 .tree {
   float: left;
   width: 100%;
@@ -132,5 +131,7 @@ export default {
   float: left;
   width: 100%;
 }
-
+.item {
+  cursor: pointer;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
- <ul>
-   <li v-for="text in textList" :key="text">{{text}}</li>
- </ul> 
+  <ul>
+    <li v-for="(text, index) in textList" :key="index">{{ text }}</li>
+  </ul>
 </template>
 
 <script>
