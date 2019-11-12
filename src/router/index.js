@@ -37,16 +37,19 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/find',
+    path: '/tree',
     component: Layout,
     children: [
       {
         path: 'index',
         component: () => import('@/views/find/index'),
         name: 'Find',
-        meta: { title: '数据查询', icon: 'documentation', affix: true }
+        meta: { title: '知识树', icon: 'documentation', affix: true }
       }
     ]
+  },
+  {
+    path: 'object'
   }
 ]
 

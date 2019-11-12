@@ -14,12 +14,12 @@
         <split-pane split="horizontal">
           <template slot="paneL">
             <div class="top-container">
-              <text-list class="node-message" :text-list="templateData" />
+              <template-text class="node-message" :item="templateData" />
             </div>
           </template>
           <template slot="paneR">
             <div class="bottom-container">
-              <text-list class="node-message" :text-list="nodeData" />
+              <node-text class="node-message" :item="nodeData" />
             </div>
           </template>
         </split-pane>
@@ -32,14 +32,15 @@
 import { fetchNodeById, fetchTreeByRoot } from '@/api/tree'
 import { fetchTemplateById } from '@/api/template'
 import TreeItem from '@/components/TreeItem'
-import TextList from '@/components/TextList'
+import TemplateText from '@/components/TemplateText'
+import NodeText from '@/components/NodeText'
 import SplitPane from 'vue-splitpane'
 
 var rootId = '1'
 
 export default {
   name: 'Find',
-  components: { TreeItem, SplitPane, TextList },
+  components: { TreeItem, SplitPane, NodeText, TemplateText },
   data() {
     return {
       treeData: {},

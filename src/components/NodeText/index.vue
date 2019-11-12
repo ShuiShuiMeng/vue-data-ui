@@ -18,27 +18,21 @@ export default {
   computed: {
     updateText() {
       var template = []
-      template.push('模板ID：\t' + this.item.id)
-      template.push('模板名称：\t' + this.item.name)
-      template.push('标签ID：\t' + this.item.nodeId)
-      var itemType = ''
-      if (this.item.type === 'event') {
-        itemType = '事件'
-      } else if (this.item.type === 'entity') {
-        itemType = '实体'
+      template.push('标签ID：\t' + this.item.id)
+      template.push('标签名称：\t' + this.item.name)
+      template.push('模板ID：\t' + this.item.template)
+      var parent = ''
+      if (this.item.parents === undefined || this.item.parents.length < 1) {
+        parent = 'root'
       } else {
-        itemType = '未知'
+        parent = this.item.parents[0]
       }
-      template.push('模板类型：\t' + itemType)
-      template.push('属性集合：\t' + this.item.attrs)
+      template.push('父节点ID：\t' + parent)
+      template.push('子节点ID：\t' + this.item.children)
       template.push('创建时间：\t' + transTime(this.item.createTime))
       template.push('创建时间：\t' + transTime(this.item.updateTime))
       return template
     }
-  },
-  watch: {
-  },
-  created() {
   }
 }
 </script>

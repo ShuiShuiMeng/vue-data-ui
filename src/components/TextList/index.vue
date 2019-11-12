@@ -9,7 +9,7 @@ export default {
   name: 'TextList',
   props: {
     textList: {
-      type: Object,
+      type: Array,
       required: true
     }
   }
