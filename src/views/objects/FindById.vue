@@ -13,7 +13,7 @@
       </el-checkbox>
     </div>
     <el-table
-      v-if="baseShow"
+      v-if="baseShow&&baseList!==null"
       :key="tableKey"
       :data="baseList"
       border
@@ -34,9 +34,9 @@
       </el-table-column>
     </el-table>
     <el-table
-      v-if="attrShow"
+      v-if="attrShow&&attrList!==null"
       :key="tableKey"
-      :data="attrsList"
+      :data="attrList"
       border
       fit
       highlight-current-row
@@ -73,61 +73,7 @@
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils/time'
 // import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
-var obj = {
-  id: '1',
-  intro: 'test2',
-  type: 'entity',
-  template: '1',
-  nodeId: '1',
-  objects: {},
-  attr: {
-    name: {
-      value: 'yinmeng',
-      createTime: '2019-11-07T17:07:07.012+08:00',
-      updateTime: '2019-11-07T17:07:07.012+08:00'
-    },
-    id: {
-      value: '',
-      createTime: '2019-11-07T17:07:07.021+08:00',
-      updateTime: '2019-11-07T17:07:07.021+08:00'
-    }
-  },
-  createTime: '2019-11-07T17:07:07.023+08:00',
-  updateTime: '2019-11-07T17:07:07.023+08:00'
-}
-
-var baseList = [
-  {
-    name: 'id',
-    value: '1'
-  },
-  {
-    name: 'intro',
-    value: '123sdlkdsldkmsmklklmlk'
-  }
-]
-
-var attrsList = [
-  {
-    name: 'id',
-    value: '6',
-    createTime: '2019-11-08T07:53:43.087+0000',
-    updateTime: '2019-11-08T07:53:43.087+0000'
-  },
-  {
-    name: 'name',
-    value: 'abc',
-    createTime: '2019-11-08T07:53:43.087+0000',
-    updateTime: '2019-11-08T07:53:43.087+0000'
-  },
-  {
-    name: 'intro',
-    value: 'sjtu.edu.cn',
-    createTime: '2019-11-08T07:53:43.087+0000',
-    updateTime: '2019-11-08T07:53:43.087+0000'
-  }
-]
+import { fetchObjectById } from '@/api/objects'
 
 export default {
   name: 'FindById',
@@ -136,9 +82,9 @@ export default {
   data() {
     return {
       tableKey: 0,
-      attrsList: attrsList,
-      baseList: baseList,
-      obj: obj,
+      attrList: null,
+      baseList: null,
+      obj: null,
       total: 0,
       objectId: '',
       baseShow: false,
@@ -146,13 +92,47 @@ export default {
     }
   },
   methods: {
-    getObject() {
+    getObject(id) {
+      fetchObjectById({ 'id': id }).then(response => {
+        this.obj = response.data
+        this.getBaseList(response.data)
+        this.getAttrList(response.data)
+      })
     },
-    getAttrList() {
+    getBaseList(object) {
+      var tmp = []
+      tmp.push({ name: '对象ID', value: object.id })
+      var type = object.type
+      if (type === 'entity') {
+        type = '实体'
+      } else if (type === 'event') {
+        type = '事件'
+      } else {
+        type = '未知'
+      }
+      tmp.push({ name: '对象类型', value: type })
+      tmp.push({ name: '简介说明', value: object.intro })
+      tmp.push({ name: '模板ID', value: object.template })
+      tmp.push({ name: '标签ID', value: object.id })
+      tmp.push({ name: '关联对象列表', value: object.objects })
+      tmp.push({ name: '对象创建时间', value: this.parseTime(object.createTime) })
+      tmp.push({ name: '最近更新时间', value: this.parseTime(object.updateTime) })
+
+      this.baseList = tmp
+      this.baseShow = true
     },
-    getBaseList() {
+    getAttrList(object) {
+      var tmp = []
+      for (var key in object.attr) {
+        tmp.push({ name: key, value: object.attr[key].value, createTime: object.attr[key].createTime, updateTime: object.attr[key].updateTime })
+      }
+      this.attrList = tmp
+      this.attrShow = true
     },
     handleFilter() {
+      if (this.objectId && this.objectId !== '') {
+        this.getObject(this.objectId)
+      }
     },
     parseTime(str) {
       return parseTime(str)
