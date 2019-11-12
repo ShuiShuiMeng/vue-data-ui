@@ -4,7 +4,7 @@
 
 <script>
 import TextList from '../TextList'
-import { transTime } from '@/utils/time.js'
+import { parseTime } from '@/utils/time.js'
 
 export default {
   name: 'TemplateText',
@@ -31,8 +31,8 @@ export default {
       }
       template.push('模板类型：\t' + itemType)
       template.push('属性集合：\t' + this.item.attrs)
-      template.push('创建时间：\t' + transTime(this.item.createTime))
-      template.push('创建时间：\t' + transTime(this.item.updateTime))
+      template.push('创建时间：\t' + parseTime(this.item.createTime))
+      template.push('创建时间：\t' + parseTime(this.item.updateTime))
       return template
     }
   },

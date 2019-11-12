@@ -12,9 +12,15 @@ const objectsRouter = {
   children: [
     {
       path: 'id',
-      component: () => import('@/views/objects/id'),
+      component: () => import('@/views/objects/FindById'),
       name: '根据ID查询',
       meta: { title: '根据ID查询' }
+    },
+    {
+      path: 'time',
+      component: () => import('@/views/objects/time'),
+      name: '根据时间查询',
+      meta: { title: '根据时间查询' }
     }
   ]
 }

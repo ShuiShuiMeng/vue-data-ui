@@ -1,4 +1,4 @@
-export function transTime(strTime) {
+export function parseTime(strTime) {
   var newDate = new Date()
   newDate.setTime(Date.parse(strTime))
   var year = newDate.getFullYear()

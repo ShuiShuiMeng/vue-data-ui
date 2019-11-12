@@ -6,6 +6,9 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+/* Routes */
+import objectsRouter from './modules/objects'
+
 export const constantRoutes = [
   {
     path: 'redirect',
@@ -48,9 +51,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: 'object'
-  }
+  objectsRouter
 ]
 
 const createRouter = () => new Router({
